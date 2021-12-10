@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e
+
+MAGMA_ROOT=/Users/shubham/myfiles/production/magma
+CHARTS_REPO=/Users/shubham/myfiles/git/magma-charts-161/charts
+
+declare -A orc8r_helm_charts
+
+orc8r_helm_charts=( 
+  [orc8r]="orc8r/cloud/helm/orc8r"
+  [lte-orc8r]="lte/cloud/helm/lte-orc8r"
+  [feg-orc8r]="feg/cloud/helm/feg-orc8r"
+  [cwf-orc8r]="cwf/cloud/helm/cwf-orc8r"
+  [wifi-orc8r]="wifi/cloud/helm/wifi-orc8r"
+  [secrets]="orc8r/cloud/helm/orc8r/charts/secrets"
+  [fbinternal-orc8r]="fbinternal/cloud/helm/fbinternal-orc8r"
+)
+
+for orc8r_chart in "${orc8r_helm_charts[@]}"
+do
+  cp -r ${MAGMA_ROOT}/${orc8r_chart} ${CHARTS_REPO}
+done
+
+# Delete Chart.lock files
+find ${CHARTS_REPO} -type f -name 'Chart.lock' -delete
